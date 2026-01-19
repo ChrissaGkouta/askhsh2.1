@@ -1,7 +1,7 @@
 import subprocess
 import re
 
-# Παράμετροι πειράματος
+
 degrees = [1000, 5000, 10000, 20000] 
 threads_list = [1, 2, 4, 8]
 runs_per_experiment = 4
@@ -16,7 +16,7 @@ for n in degrees:
         serial_times = []
         parallel_times = []
         
-        # Εκτέλεση του πειράματος πολλές φορές για ακρίβεια
+        # Εκτέλεση του πειράματος 
         for _ in range(runs_per_experiment):
             try:
                 result = subprocess.run(
@@ -42,7 +42,7 @@ for n in degrees:
             avg_serial = sum(serial_times) / len(serial_times)
             avg_parallel = sum(parallel_times) / len(parallel_times)
             
-            # Speedup = Πόσες φορές πιο γρήγορο είναι το παράλληλο από το σειριακό
+            # Speedup
             speedup = avg_serial / avg_parallel if avg_parallel > 0 else 0
             
             print(f"{n:<8} | {t:<3} | {avg_serial:<14.6f} | {avg_parallel:<14.6f} | {speedup:<8.2f}")
