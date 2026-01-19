@@ -1,10 +1,10 @@
 #define _POSIX_C_SOURCE 199309L
 #include <stdio.h>
 #include <stdlib.h>
-#include <omp.h> // Βιβλιοθήκη OpenMP
+#include <omp.h> 
 #include <time.h>
 
-// Βοηθητική συνάρτηση για μέτρηση χρόνου
+//  συνάρτηση για μέτρηση χρόνου
 double get_time_diff(struct timespec start, struct timespec end) {
     return (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
 }
@@ -26,14 +26,12 @@ void parallel_mult_omp(int n, int num_threads, int *A, int *B, long long *C) {
     // Ρύθμιση αριθμού νημάτων
     omp_set_num_threads(num_threads);
 
-    // Το loop τρέχει για κάθε συντελεστή k του αποτελέσματος (0 έως 2n)
-    // Χρησιμοποιούμε schedule(dynamic) επειδή ο φόρτος εργασίας δεν είναι ομοιόμορφος.
-    // Οι μεσαίοι όροι (k κοντά στο n) απαιτούν περισσότερους υπολογισμούς από τους ακραίους.
+
     #pragma omp parallel for schedule(dynamic)
     for (int k = 0; k <= 2 * n; k++) {
         long long sum = 0;
         
-        // Όρια i: max(0, k-n) <= i <= min(k, n)
+     
         int start_i = (k - n > 0) ? (k - n) : 0;
         int end_i = (k < n) ? k : n;
 
@@ -56,7 +54,7 @@ int main(int argc, char *argv[]) {
     struct timespec start, end;
     double t_init, t_serial, t_parallel;
 
-    // --- Αρχικοποίηση ---
+
     clock_gettime(CLOCK_MONOTONIC, &start);
     
     int *A = (int *)malloc((n + 1) * sizeof(int));
@@ -69,7 +67,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    // Τυχαίοι ακέραιοι (ίδια λογική με Άσκηση 1.1)
+    // Τυχαίοι ακέραιοι 
     srand(time(NULL));
     for (int i = 0; i <= n; i++) {
         do { A[i] = rand() % 100 - 50; } while (A[i] == 0);
@@ -101,7 +99,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // Εκτύπωση αποτελεσμάτων (Format συμβατό με το script python)
+   
     printf("Degree: %d, Threads: %d\n", n, num_threads);
     printf("Init Time: %.6f sec\n", t_init);
     printf("Serial Time: %.6f sec\n", t_serial);
